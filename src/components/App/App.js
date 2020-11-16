@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { MEDIA_QUERY_MD } from "../constants/style";
 
 const Title = styled.h1`
@@ -54,7 +54,7 @@ function App() {
 
   function updateBoard(x, y, newValue) {
     const newBoard = JSON.parse(JSON.stringify(board));
-    newBoard[y][x] = newValue;
+    newBoard[x][y] = newValue;
     setBoard(newBoard);
   }
 
@@ -74,13 +74,16 @@ function App() {
             onClick={() => {
               handleButtonClick([i, j]);
             }}
-            children={board[j][i]}
+            children={board[i][j]}
           />
         );
       }
     }
     return arr;
   }
+  useEffect(() => {
+    console.log(board);
+  });
   return (
     <div className="App">
       <Title>五子棋遊戲</Title>
