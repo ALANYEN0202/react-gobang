@@ -1,11 +1,14 @@
 import styled from "styled-components";
 import { useEffect, useState } from "react";
 import { MEDIA_QUERY_MD } from "../constants/style";
+import calculateWinner from "./Winner";
+import { ResetButton, ReaderSquare } from "./Button";
 
 const Title = styled.h1`
   width: 100%;
   text-align: center;
 `;
+
 const Wrapper = styled.div`
   width: 640px;
   margin: 0 auto;
@@ -16,40 +19,24 @@ const Wrapper = styled.div`
     margin: 0 auto;
   }
 `;
-const Button = styled.button`
-  width: 34px;
-  height: 34px;
-  background-color: #ff9224;
-  margin-left: -1px;
-  margin-top: -1px;
-  padding: 4px;
-  line-height: 35px;
-
-  ${MEDIA_QUERY_MD} {
-    width: 24px;
-    height: 24px;
-    line-height: 15px;
-  }
-
-  &:hover {
-    background-color: #4f4f4f;
-  }
-`;
 
 const NextPlayer = styled.div`
   text-align: center;
 `;
 
-function ReaderSquare({ onClick, value, children }) {
+function Status({ status, whiteIsNext }) {
+  if (status) {
+    return <NextPlayer> Winner is {status === "W" ? "白" : "黑"}</NextPlayer>;
+  }
   return (
-    <Button value={value} onClick={onClick}>
-      {children}
-    </Button>
+    <NextPlayer> NextPlayer is {whiteIsNext ? "白子" : "黑子"}</NextPlayer>
   );
 }
 
 function App() {
   const [board, setBoard] = useState(Array(19).fill(Array(19).fill(null)));
+  const [position, setPosition] = useState([]);
+  const [winner, setWinner] = useState("");
   const [whiteIsNext, setWhiteIsNext] = useState(true);
 
   function updateBoard(x, y, newValue) {
@@ -60,9 +47,13 @@ function App() {
 
   function Board() {
     const handleButtonClick = (arr) => {
-      updateBoard(arr[0], arr[1], whiteIsNext ? "O" : "X");
+      if (board[arr[0]][arr[1]]) return;
+      if (winner) return;
+      updateBoard(arr[0], arr[1], whiteIsNext ? "W" : "B");
+      setPosition(arr);
       setWhiteIsNext(!whiteIsNext);
     };
+
     let arr = [];
     for (let i = 0; i < 19; i++) {
       arr[i] = [];
@@ -70,24 +61,53 @@ function App() {
         arr[i][j] = (
           <ReaderSquare
             key={`${i},${j}`}
-            value={[i, j]}
             onClick={() => {
               handleButtonClick([i, j]);
             }}
-            children={board[i][j]}
+            whiteIsNext={whiteIsNext}
+            value={board[i][j]}
           />
         );
       }
     }
     return arr;
   }
+
   useEffect(() => {
-    console.log(board);
-  });
+    const rowWin = calculateWinner({ board, position, type: "row" });
+    const columnWin = calculateWinner({ board, position, type: "column" });
+    const leftSlash = calculateWinner({ board, position, type: "leftUpSlash" });
+    const rightSlash = calculateWinner({
+      board,
+      position,
+      type: "rightUpSlash",
+    });
+    if (rowWin) {
+      setWinner(rowWin);
+    }
+    if (columnWin) {
+      setWinner(columnWin);
+    }
+    if (leftSlash) {
+      setWinner(leftSlash);
+    }
+    if (rightSlash) {
+      setWinner(rightSlash);
+    }
+  }, [board, position]);
+
+  const handleResetButton = () => {
+    setBoard(Array(19).fill(Array(19).fill(null)));
+    setPosition([]);
+    setWinner("");
+    setWhiteIsNext(true);
+  };
+
   return (
     <div className="App">
       <Title>五子棋遊戲</Title>
-      <NextPlayer>NextPlayer is {whiteIsNext ? "白子" : "黑子"}</NextPlayer>
+      <Status status={winner} whiteIsNext={whiteIsNext} />
+      <ResetButton onClick={handleResetButton}>重新開始</ResetButton>
       <Wrapper>
         <Board />
       </Wrapper>
