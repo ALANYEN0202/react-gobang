@@ -21,10 +21,7 @@
       "prettier --write"
     ]
   },
-  "homepage": "https://alanyen0202.github.io/react-gobang",
   "scripts": {
-    "predeploy": "npm run build",
-    "deploy": "gh-pages -d build",
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
