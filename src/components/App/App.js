@@ -17,6 +17,7 @@ const Wrapper = styled.div`
     width: 440px;
     padding: 0px;
     margin: 0 auto;
+    line-height: 0px;
   }
 `;
 
