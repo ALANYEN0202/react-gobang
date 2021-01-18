@@ -1,7 +1,7 @@
 {
   "files": {
-    "main.js": "/react-gobang/static/js/main.ac44e420.chunk.js",
-    "main.js.map": "/react-gobang/static/js/main.ac44e420.chunk.js.map",
+    "main.js": "/react-gobang/static/js/main.a3e1a6b2.chunk.js",
+    "main.js.map": "/react-gobang/static/js/main.a3e1a6b2.chunk.js.map",
     "runtime-main.js": "/react-gobang/static/js/runtime-main.16afde83.js",
     "runtime-main.js.map": "/react-gobang/static/js/runtime-main.16afde83.js.map",
     "static/js/2.ca6a66c0.chunk.js": "/react-gobang/static/js/2.ca6a66c0.chunk.js",
@@ -12,6 +12,6 @@
   "entrypoints": [
     "static/js/runtime-main.16afde83.js",
     "static/js/2.ca6a66c0.chunk.js",
-    "static/js/main.ac44e420.chunk.js"
+    "static/js/main.a3e1a6b2.chunk.js"
   ]
 }
